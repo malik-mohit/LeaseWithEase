@@ -1,0 +1,199 @@
+﻿ @{
+    ViewData["Title"] = "Home Page";
+}
+
+@model Model.PropertyModel
+
+
+
+
+
+<div class="background">
+    <video class="bg-video" autoplay loop muted>
+        <source src="~/assets/bg.mp4" type="video/mp4">
+    </video>
+    
+    <h1 class="heading">
+        Discover a <br /> place you will<br /> love to live.
+    </h1>
+</div>
+
+<div class="search">
+    <form class="search-form" asp-action="Search" asp-controller="Property" method="GET">
+        <div class="search-param-cont">
+            <div class="search-param">
+                <label class="search-heading">State</label>
+                <select class="input-home" id="SelectedStateIdHome" asp-for="StateId" asp-items="@(new SelectList(@ViewBag.State, "StateId", "StateName"))">
+                    <option value='-1'>Select a State</option>
+                </select>
+            </div>
+            <div class="search-param-sep">
+
+                <hr class="seperation" />
+
+                <div class="search-param">
+                    <label class="search-heading">City</label>
+                    <select class="input-home" id="SelectedCityIdHome" asp-for="CityId">
+                        <option value="-1">Select a City</option>
+                    </select>
+                </div>
+            </div>
+            <div class="search-param-sep">
+
+                <hr class="seperation" />
+
+                <div class="search-param">
+                    <label class="search-heading">Category</label>
+                    <select class="input-home" asp-for="Type">
+                        <option value=@null>Select a Category</option>
+                        <option value="all">All</option>
+                        <option value="apartment">Apartment</option>
+                        <option value="office">Office</option>
+                        <option value="shop">Shop</option>
+                        <option value="studio">Studio</option>
+                        <option value="villa">Villa</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="search-button-cont">
+            <button class="search-button" type="submit">
+                <span class="material-symbols-outlined" style="font-size:2rem;">
+                    search
+                </span>
+            </button>
+        </div>
+
+    </form>
+</div>
+
+
+<main class="content">
+
+    <section class="about-section">
+        <div class="about-image">
+            <div class="about-image-wrapper">
+                <div class="image-card">
+                    <img class="about-img-big" alt="beautiful interior" src="~/assets/aboutimgbig.png" />
+                </div>
+                <img class="about-img-small" alt="beautiful interior" src="~/assets/aboutimg.png" />
+                <img class="pattern" alt="beautiful interior" src="~/assets/pattern.svg" />
+            </div>
+        </div>
+        <div class="about-container">
+            <div class="about-wrapper">
+                <div class="section-indicator">About Us</div>
+                <h3 class="section-heading">
+                    The Leading Real Estate<br />
+                    Rental Marketplace.
+                </h3>
+                <p class="section-content">
+                    Pellentesque habitant morbi tristique<br />
+                    senectus et netus et malesuada fames<br />
+                    ac turpis egestas.
+                </p>
+                <div class="feature-container">
+                    <div class="feature-row ">
+                        <div class="icon-wrapper">
+                            <img src="~/assets/register.svg" class="register-img" />
+                        </div>
+                        <h4 class="feature">FREE REGISTRATION</h4>
+                    </div>
+                    <div class="feature-row">
+                        <div class="icon-wrapper">
+                            <img src="~/assets/verified.svg" class="verified-img" />
+
+                        </div>
+                        <h4 class="feature"> VERIFIED PROPERTIES</h4>
+                    </div>
+                    <div class="feature-row">
+                        <div class="icon-wrapper">
+                            <img src="~/assets/coverage.svg" class="coverage-img" />
+                        </div>
+                        <h4 class="feature"> LARGE COVERAGE</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <section class="image-grid-sec">
+      <div style="display:flex; align-items:center;gap:0.5rem;flex-direction:column;">
+            <h3 class="section-heading">Explore Lifestyles</h3>
+            Lorem ipsum dolor sit amet, consectetur
+        </div>
+        <div class="image-grid">
+            <div class="apartment-img over-trans">
+                <img src="/assets/ApartmentImg.jpg" class="prop-image" />
+                <div class="overlay">
+                    Apartment
+                </div>
+            </div> 
+            <div class="office-img over-trans">
+                <img src="/assets/officeImg.jpg" class="prop-image" />
+                <div class="overlay">
+                    Office
+                </div>
+            </div>
+            <div class="shop-img over-trans">
+                <img src="/assets/shopImg.jpg" class="prop-image" />
+                <div class="overlay">
+                    Shop
+                </div>
+            </div> 
+            <div class="single-img over-trans">
+                <img src="/assets/singleImg.jpg" class="prop-image" />
+                <div class="overlay">
+                    Single Family Home
+                </div>
+            </div> 
+            <div class="studio-img over-trans">
+                <img src="/assets/studioImg.jpg" class="prop-image" />
+                 <div class="overlay">
+                    Studio
+                </div>
+            </div> 
+            <div class="villa-img over-trans">
+                <img src="/assets/villaImg.jpg" class="prop-image" />
+                <div class="overlay">
+                    Villa
+                </div>
+            </div>
+           
+        </div>
+    </section>
+</main>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+
+    $(function () {
+        $('#SelectedStateIdHome').change(function () {
+            var StateId = $(this).val();
+
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetCityList", "Account")",
+                data: { StateId: StateId },
+                success: function (data) {
+
+                    var cityList = $('#SelectedCityIdHome');
+                    cityList.empty();
+                    cityList.append($(' <option value="-1">Select a City</option>'))
+                    $.each(data, function (i, city) {
+                        cityList.append($('<option value="' + city.cityId + '">' + city.cityName + '</option>'));
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+
+
+        });
+    });
+
+</script>
+

@@ -1,0 +1,9 @@
+﻿@model List<Model.PropertyModel>
+@{
+    ViewData["Title"] = "HiddenProperties";
+    Layout = "~/Views/Shared/Dashboard/_OwnerDashboardLayout.cshtml";
+}
+
+<h2 class="dash-heading">Hidden Properties</h2>
+@await Html.PartialAsync("Components/_PropertyList", Model)
+

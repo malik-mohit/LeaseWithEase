@@ -1,0 +1,236 @@
+﻿@using System.Security.Claims;
+@using ServiceLayer.Services;
+@{
+    var ProfilePic = "";
+    var UserId = Convert.ToInt32(((ClaimsIdentity)User.Identity).Claims.FirstOrDefault(x => x.Type == "CustomerId")?.Value);
+    var name = Convert.ToString(((ClaimsIdentity)User.Identity).Claims.FirstOrDefault(x => x.Type == "Name")?.Value);
+
+    var approval = Convert.ToString(Url.Action("ApprovalRequests", "Admin"));
+    var listed = Url.Action("ListedProperties", "Admin");
+    var blockprop = Url.Action("BlockedProperties", "Admin");
+    var verification = Url.Action("VerificationRequests", "Admin");
+    var flagged = Url.Action("FlaggedUsers", "Admin");
+    var blockuser = Url.Action("BlockedUsers", "Admin");
+    var currentUrl = ViewContext.HttpContext.Request.Path;
+    if (CommonService.GetProfilePicUrl(Convert.ToInt32(UserId)) != null)
+    {
+        ProfilePic = CommonService.GetProfilePicUrl(Convert.ToInt32(UserId));
+    }
+    else
+    {
+        ProfilePic = "/assets/profile.jpg";
+    }
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HouseRent</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+    <link href="~/css/global.css" rel="stylesheet" asp-append-version="true" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48
+        }
+
+        .material-symbols-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48
+        }
+    </style>
+</head>
+<body onload="ShowSelected()">
+    <div style="height: 100vh;position:relative">
+        <div id="popup-form" class="popup-form hidden">
+        </div>
+        <h3 class="dashboard-logo">
+            <a asp-controller="HouseRent" asp-action="Index" style="text-decoration:none;">
+                <img src="~/assets/images/logo.svg" />
+            </a>
+        </h3>
+        <div class="sidebar">
+
+            <div class="sidebar-content">
+                <div class="profile-section">
+                    <div style="position:relative;display:flex;justify-content:center;">
+                    <img id="profile-pic" style="width:8rem;height:8rem;border-radius:50%" src="@ProfilePic" />
+                    <form method="post" enctype="multipart/form-data" id="upload-form" class="custom-file-upload">
+                        <label for="file-input" style="height:18px">
+                            <span class="material-symbols-outlined" style="font-size:1.125rem">
+                                edit
+                            </span>
+                        </label>
+                        <input id="file-input" name="file" type="file" onchange="handleFileSelect()" hidden />
+                    </form>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">@name</div>
+                        <div class="user-role">
+                            Admin
+                            @if (CommonService.isVerified(@UserId) == 2)
+                            {
+                                <span class="material-symbols-outlined material-symbols-fill" style="color:green;">
+                                    verified
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="control-section">
+                    <div class="section">
+                        <div class="section-heading">
+                            <span class="material-symbols-outlined" style="font-size:2rem">
+                                real_estate_agent
+                            </span>
+                            <h3>
+                                Property
+                            </h3>
+
+                        </div>
+                        <ul>
+                            @if (currentUrl == approval)
+                            {
+                                <li class="li green selected" style="border-left: 4px solid #346D6D;background-color:#F2F2F2"><a asp-action="ApprovalRequests">Aproval Requests</a></li>
+                            }
+                            else
+                            {
+                                <li class="li green selected"><a asp-action="ApprovalRequests">Aproval Requests</a></li>
+                            }
+                            @if (currentUrl == listed)
+                            {
+                                <li class="li yellow" style="border-left: 4px solid #346D6D;background-color:#F2F2F2"><a asp-action="ListedProperties">Listed Properties</a></li>
+                            }
+                            else
+                            {
+                                <li class="li yellow"><a asp-action="ListedProperties">Listed Properties</a></li>
+                            }
+                            @if (currentUrl == blockprop)
+                            {
+                                <li class="li red" style="border-left: 4px solid #346D6D;background-color:#F2F2F2"><a asp-action="BlockedProperties">Blocked Properties</a></li>
+                            }
+                            else
+                            {
+                                <li class="li red"><a asp-action="BlockedProperties">Blocked Properties</a></li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="section">
+                        <div class="section-heading">
+                            <span class="material-symbols-outlined" style="font-size:2rem">
+                                group
+                            </span>
+                            <h3>
+                                User
+                            </h3>
+
+                        </div>
+                        <ul>
+                            @if (currentUrl == verification)
+                            {
+                                <li class="li green" style="border-left: 4px solid #346D6D;background-color:#F2F2F2"><a asp-action="VerificationRequests">Verification Requests</a></li>
+                            }
+                            else
+                            {
+                                <li class="li green"><a asp-action="VerificationRequests">Verification Requests</a></li>
+                            }
+                            @if (currentUrl == flagged)
+                            {
+                                <li class="li yellow" style="border-left: 4px solid #346D6D;background-color:#F2F2F2"><a asp-action="FlaggedUsers">Flagged Users</a></li>
+                            }
+                            else
+                            {
+                                <li class="li yellow"><a asp-action="FlaggedUsers">Flagged Users</a></li>
+                            }
+                            @if (currentUrl == blockuser)
+                            {
+                                <li class="li red" style="border-left: 4px solid #346D6D;background-color:#F2F2F2"><a asp-action="BlockedUsers">Blocked Users</a></li>
+                            }
+                            else
+                            {
+                                <li class="li red"><a asp-action="BlockedUsers">Blocked Users</a></li>
+                            }
+
+                        </ul>
+                        <div class="section">
+                            <a asp-controller="Account" asp-action="Logout" class="section-heading">
+                                <span class="material-symbols-outlined" style="font-size:2rem">
+                                    settings
+                                </span>
+                                <h3>
+                                    Settings
+                                </h3>
+                            </a>
+                        </div>
+                       
+                    </div>
+                   
+                   
+                </div>
+                <div  class="logout-section">
+                    <a asp-controller="Account" asp-action="Logout" class="section-heading">
+                        <span class="material-symbols-outlined" style="font-size:2rem">
+                            logout
+                        </span>
+                        <h3>
+                            Logout
+                        </h3>
+                    </a>
+                </div>
+               
+            </div>
+           
+        </div>
+        <div class="dashboard-content">
+            @RenderBody()
+        </div>
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+    <script>
+        function getRandomValue() {
+            return Math.floor(Math.random() * 1000000000);
+        }
+        function handleFileSelect() {
+            var fileInput = document.getElementById("file-input");
+            const file = fileInput.files[0];
+            var formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            $.ajax({
+                url: "@Url.Action("UploadImage", "Account")",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+
+                    var img = $("#profile-pic");
+                    var src = img.attr("src");
+                    var randomValue = getRandomValue();
+                    img.attr("src", src + "?v=" + randomValue);
+                },
+                error: function () {
+                    alert("Error uploading profile picture.");
+                }
+            });
+
+        }
+
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+

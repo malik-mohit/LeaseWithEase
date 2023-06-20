@@ -1,0 +1,133 @@
+﻿@model Model.FlagUserModel
+@using ServiceLayer.Services
+@using System.Security.Claims;
+
+@{
+    var ProfilePic="";
+    
+    if (CommonService.GetProfilePicUrl(Model.CustomerId)!=null)
+    {
+        ProfilePic = CommonService.GetProfilePicUrl(Model.CustomerId);
+    }
+    else
+    {
+        ProfilePic = "/assets/opro1.jpg";
+    }
+   }
+<style>
+    .user-item {
+        display: flex;
+        align-items: center;
+        height: 100px;
+        padding-inline: 3rem;
+        background-color: white;
+    }
+
+    .user-info-cont {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex: 2;
+    }
+
+    .user-item-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .user-profile {
+        width: 64px;
+        height: 64px;
+        background-image: url("/assets/opro1.jpg");
+        background-size: cover;
+        border-radius: 50%;
+    }
+
+    .username {
+        font-weight: 700;
+    }
+
+    .user-action {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        justify-content: space-between;
+    }
+
+    .action-icon-cont {
+        display: flex;
+        gap: 4rem;
+    }
+
+    .action-icon {
+        font-size: 2rem;
+    }
+
+</style>
+<div class="user-item">
+    <div class="user-info-cont">
+        @if (CommonService.GetProfilePicUrl(Model.CustomerId) != null)
+        {
+            <img src="@ProfilePic" style=" width: 64px; height: 64px; background-size: cover; border-radius: 50%;" />
+        }else{
+        <div class="user-profile">
+        </div>
+        }
+        <div class="user-item-info">
+            <div class="username"> @Model.CustomerName</div>
+            <div>Flag Count :: @Model.FlagCount</div>
+
+
+        </div>
+    </div>
+    
+    <div class="user-action">
+        <div class="view-detail-cont">
+            <a style="color:blue" id="view-comment-@Model.CustomerId">View Comment</a>
+        </div>
+        <div class="action-icon-cont">
+            
+                <a asp-action="UnBlockUser" asp-controller="Admin" asp-route-userid="@Model.CustomerId">
+                    <span class="material-symbols-outlined action-icon" style="color:green">
+                        done
+                    </span>
+                </a>
+            
+             
+                <a asp-action="BlockUser" asp-controller="Admin" asp-route-userid="@Model.CustomerId">
+                    <span class="material-symbols-outlined action-icon" style="color:red">
+                        close
+                    </span>
+                </a>
+            
+
+        </div>
+    </div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+    $('#view-comment-@Model.CustomerId').click(function () {
+
+        var UserId = '@Model.CustomerId';
+        document.getElementById("popup-form").classList.remove("hidden");
+
+        $.ajax({
+            url: '@Url.Action("ViewFlaggedComment", "Admin")',
+            type: 'GET',
+            data: {
+                UserId: UserId
+               
+            },
+            success: function (result) {
+                $('#popup-form').html(result);
+            }
+        });
+
+    });
+
+</script>
+
+
+

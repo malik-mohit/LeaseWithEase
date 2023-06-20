@@ -1,0 +1,35 @@
+﻿@model Model.FormModel;
+
+
+<style>
+    .cross{
+        font-size:2rem;
+    }
+    .cross:hover{
+        cursor:pointer;
+    }
+</style>
+
+<div style="padding:3rem;background-color:white;display:flex;align-items:center;justify-content:center;position:relative;" >
+    <span class="material-symbols-outlined cross" style="position:absolute;top:5%;right:5%;font-weight:900; color:red;" onclick="Close()">
+        close
+    </span>
+<form style="display:flex;flex-direction:column; gap:2rem" asp-action="FlagProperty" asp-controller="Property" asp-route-url="@Model.Url">
+    <input asp-for="PropertyId" hidden value="@Model.PropertyId"/>
+    <input asp-for="CustomerId" hidden value="@Model.CustomerId"/>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+        <label style="font-size:1.5rem;font-weight:700;">Flag Property</label>
+        <textarea asp-for="Comment" placeholder="I want to flag because..." style="resize:none;width:300px" rows="9"></textarea>
+    </div>
+        <button type="submit" style="border:none;padding:0.75rem;color:white;background-color:#346D6D;font-weight:700;">
+            Flag Property
+    </button>
+</form>   
+</div>
+
+<script>
+    function Close(){
+        var element = document.getElementById("popup-form");
+        element.classList.add("hidden");
+    }
+</script>

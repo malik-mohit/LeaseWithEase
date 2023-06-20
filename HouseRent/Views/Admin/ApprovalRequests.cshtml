@@ -1,0 +1,12 @@
+﻿@model List<Model.PropertyModel>
+@{
+    ViewData["Title"] = "ApprovalRequests";
+    Layout = "~/Views/Shared/Dashboard/_AdminDashboardLayout.cshtml";
+}
+
+@*<h2 class="dash-heading">Approval Requests</h2>*@
+@await Html.PartialAsync("Components/_PropertyList", Model)
+
+
+
+

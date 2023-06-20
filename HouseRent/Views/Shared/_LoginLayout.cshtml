@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HouseRent</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/HouseRent.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global.css" asp-append-version="true" />
+</head>
+<body>
+    <div style="height: 100vh;position:relative">
+        <div id="popup-form" class="popup-form hidden">
+        </div>
+        <a asp-controller="HouseRent" asp-action="Index" style="text-decoration:none; color:#346D6D">
+            <span class="material-symbols-outlined home-btn">
+                home
+            </span>
+        </a>
+        <div class="login-img">
+        </div>
+        <div class="login-content">
+            @RenderBody()
+        </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    </div>
+</body>
+</html>

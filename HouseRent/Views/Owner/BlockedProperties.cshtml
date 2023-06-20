@@ -1,0 +1,9 @@
+﻿@model List<Model.PropertyModel>
+@{
+    ViewData["Title"] = "BlockedProperties";
+    Layout = "~/Views/Shared/Dashboard/_OwnerDashboardLayout.cshtml";
+}
+
+<h2 class="dash-heading">Blocked Properties</h2>
+@await Html.PartialAsync("Components/_PropertyList", Model)
+

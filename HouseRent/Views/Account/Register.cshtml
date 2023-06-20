@@ -1,0 +1,172 @@
+﻿@model Model.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+
+<div class="login">
+    <h2 class="login-heading">Welcome</h2>
+    <p class="login-subheading">
+        Register your account
+    </p>
+
+    <form id="register" class="login-form" asp-action="Register" asp-controller="Account" method="post">
+        <div asp-validation-summary="ModelOnly" class="small"></div>
+        <div class="form-row">
+            <span>Name</span>
+            <input id="name" class="input input-full" placeholder="Enter your Name" asp-for="Name" />
+            <span asp-validation-for="Name" class="small"></span>
+        </div>
+        <div class="form-row">
+            <div style="display:flex;justify-content:space-between">
+                <span>Email</span>
+                <span onclick="showPopUp()" style="color:dodgerblue">Verify Email</span>
+            </div>
+            
+            <input class="input input-full" id="Email" placeholder="Enter your Email" asp-for="Email" />
+            
+            <span asp-validation-for="Email" class="small">@ViewBag.Message</span>
+
+        </div>
+        <div class="form-row">
+
+            <span>Password</span>
+            <input id="password" type="password" class="input input-full" placeholder="Enter your Password" asp-for="Password" />
+            <span asp-validation-for="Password" class="small"></span>
+        </div>
+        <div class="form-row">
+            <div class="half-form">
+                <div class="input-half">
+                    <span>Mobile</span>
+                    <input id="mobile-no" type="tel" class="input " placeholder="+91" asp-for="Mobile" />
+                    <span asp-validation-for="Mobile" class="small"></span>
+                </div>
+                <div class="input-half">
+                    <span>Gender</span>
+                    <select id='gender' class="input select-options" asp-for="Gender">
+                        <option value="@null">Select your Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="others">Others</option>
+                    </select>
+                    <span asp-validation-for="Gender" class="small"></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="form-row">
+            <span>Address</span>
+            <input id="address" placeholder="House no./ Street" class="input input-full" asp-for="Address" />
+            <span asp-validation-for="Address" class="small"></span>
+        </div>
+        <div class="form-row">
+            <div class="half-form">
+                <div class="input-half">
+                    <span>State</span>
+                    <select class="input select-options" id="SelectedStateId" asp-for="StateId" asp-items="@(new SelectList(@ViewBag.State, "StateId", "StateName"))">
+                        <option value="@null">Select a State</option>
+                    </select>
+                    <span asp-validation-for="StateId" class="small"></span>
+                </div>
+                <div class="input-half">
+                    <span>City</span>
+                    <select class="input select-options" id="SelectedCityId" asp-for="CityId">
+                        <option value="@null">Select a City</option>
+                    </select>
+                    <span asp-validation-for="CityId" class="small"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="login-btns-cont">
+            <button class="login-btn" type="submit">Register</button>
+
+        </div>
+    </form>
+    <div class="reg-link">
+        <span>Already have an account? </span>
+        <a asp-controller="Account" asp-action="Login" style="text-decoration:none; color:dodgerblue">  Sign In</a>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+
+    $(function () {
+        $(function () {
+            var val = $(".small");
+        })
+        $('#SelectedStateId').change(function () {
+            var StateId = $(this).val();
+
+
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetCityList", "Account")",
+                data: { StateId: StateId },
+                success: function (data) {
+
+                    var cityList = $('#SelectedCityId');
+                    cityList.empty();
+                    cityList.append($(' <option value="@null">Select a City</option>'))
+                    $.each(data, function (i, city) {
+                        cityList.append($('<option value="' + city.cityId + '">' + city.cityName + '</option>'));
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+
+
+        });
+    });
+
+
+
+    $('input').click(function () {
+        const nodeList = document.querySelectorAll(".small");
+        for (let i = 0; i < nodeList.length; i++) {
+            nodeList[i].innerHTML = "";
+            nodeList[i].style.display = "none";
+        }
+
+
+    });
+    $('select').click(function () {
+        const nodeList = document.querySelectorAll(".small");
+        for (let i = 0; i < nodeList.length; i++) {
+            nodeList[i].innerHTML = "";
+            nodeList[i].style.display = "none";
+        }
+
+
+    });
+
+
+
+    function showPopUp() {
+        var element = document.getElementById("popup-form");
+        var email = document.getElementById("Email").value;
+        element.classList.remove("hidden");
+        $.ajax({
+            url: '@Url.Action("VerifyEmail", "Account")',
+            type: 'POST',
+            data: {
+                Email: email,
+            },
+
+            success: function (result) {
+                $('#popup-form').html(result);
+            }
+        })
+
+    }
+
+
+
+
+</script>
+

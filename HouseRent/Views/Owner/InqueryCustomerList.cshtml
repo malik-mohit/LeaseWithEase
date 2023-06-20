@@ -1,0 +1,13 @@
+﻿@model Tuple<List<Model.CustomerModel>,int>
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "InqueryCustomerList";
+    Layout = "~/Views/Shared/Dashboard/_OwnerDashboardLayout.cshtml";
+    var UserId = Convert.ToInt32(((ClaimsIdentity)User.Identity).Claims.FirstOrDefault(x => x.Type == "CustomerId")?.Value);
+}
+
+
+
+<h2 class="dash-heading">Enquries</h2>
+@await Html.PartialAsync("Components/_ChatItemList", new{customer=Model.Item1, propertyid=Model.Item2})
+

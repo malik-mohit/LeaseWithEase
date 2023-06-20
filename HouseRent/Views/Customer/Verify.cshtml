@@ -1,0 +1,22 @@
+﻿@model Model.DocumentModel
+@{
+    ViewData["Title"] = "Verify";
+    Layout = "~/Views/Shared/Dashboard/_CustomerDashboardLayout.cshtml";
+}
+
+<div style="display:flex; align-items:center; justify-content:center">
+
+
+    <form asp-action="Verify" asp-controller="Customer" method="post" enctype="multipart/form-data">
+        <h1>Upload your Documents</h1>
+
+        <label for="Upload Aadhar Card"><h3>Upload Aadhar Card</h3></label><br />
+
+        <input type="file" accept="image/*" asp-for="Aadhar"/>
+        <button type="submit">
+            Upload
+        </button>
+    </form>
+
+</div>
+

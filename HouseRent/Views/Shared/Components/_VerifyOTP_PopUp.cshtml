@@ -1,0 +1,84 @@
+﻿@model string
+@{
+    string msg = ViewBag.Message;
+}
+<div class="forget-pass-cont" style=";width:40rem; height:20rem; background-color:aliceblue; border-radius:5px;position:relative">
+    <span class="material-symbols-outlined cross" style="position:absolute;top:5%;right:5%;font-weight:900; color:red;" onclick="Close()">
+        close
+    </span>
+    <div style="padding:2rem">
+        <div>
+            <h3>Verify OTP</h3>
+            @if (msg != null)
+            {
+                <h2 style="color:red;">@msg</h2>
+            }
+        </div>
+        <div>
+            <form >
+                <div style="display:flex;">
+                    <div>
+                        <input id="OTP" type="text" placeholder="Enter OTP" />
+                    </div>
+                    <div>
+                    <button id="verifyotp">Verify</button>
+
+                    <button id="re-enter-email">Re-Enter Email</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+    </div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+
+
+    $('#verifyotp').click(function (event) {
+
+        event.preventDefault();
+        var element = document.getElementById("popup-form");
+        element.classList.remove("hidden");
+        var OTP = document.getElementById("OTP").value;
+        var OTP = document.getElementById("OTP").value;
+        var Email = '@Model';
+        $.ajax({
+            url: '@Url.Action("VerifyOTP", "Account")',
+            type: 'GET',
+            data:{OTP:OTP,Email:Email},
+            success: function (result) {
+                $('#popup-form').html(result);
+            }
+        })
+
+    });
+    
+    $('#re-enter-email').click(function () {
+       event.preventDefault();
+        var element = document.getElementById("popup-form");
+        element.classList.remove("hidden");
+        $.ajax({
+            url: '@Url.Action("Partial", "Account")',
+            type: 'GET',
+            success: function (result) {
+                $('#popup-form').html(result);
+            }
+        })
+
+    });
+
+
+     function Close(){
+        var element = document.getElementById("popup-form");
+        element.classList.add("hidden");
+    }
+
+
+</script>
+
+
+

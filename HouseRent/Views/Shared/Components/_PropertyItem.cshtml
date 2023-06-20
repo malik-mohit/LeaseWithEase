@@ -1,0 +1,182 @@
+﻿@model Model.PropertyModel
+@using ServiceLayer.Services
+@using System.Security.Claims
+@{
+    var Role = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+    var CustomerId = ((ClaimsIdentity)User.Identity).Claims.Where(x => x.Type == "CustomerId").FirstOrDefault()?.Value;
+    var searchUrl = Url.Action("Search", "Property");
+    var approvalrequest = Url.Action("ApprovalRequests", "Admin");
+    var likeUrlOwner = Url.Action("LikedProperties", "Owner");
+    var likeUrlCustomer = Url.Action("LikedProperties", "Customer");
+    string currentUrl = ViewContext.HttpContext.Request.Path + ViewContext.HttpContext.Request.QueryString;
+
+}
+
+<div style="position:relative;" class="property-item-wrappper">
+
+    @if (@ViewContext.HttpContext.Request.Path == searchUrl || @ViewContext.HttpContext.Request.Path == likeUrlOwner || @ViewContext.HttpContext.Request.Path == likeUrlCustomer)
+    {
+        if (CustomerId != null)
+        {
+            if (Model.UserId != Int32.Parse(CustomerId))
+            {
+                if (!UserService.IsLiked(Int32.Parse(CustomerId), Model.PropertyId))
+                {
+                    <a class="shortlist-icon" asp-controller="Property" asp-action="LikeProperty" asp-route-PropertyId="@Model.PropertyId" asp-route-url="@currentUrl">
+                        <span class="material-symbols-outlined" style="color:red">
+                            favorite
+                        </span>
+                    </a>
+                }
+                else
+                {
+                    <a class="shortlist-icon" asp-controller="Property" asp-action="LikeProperty" asp-route-PropertyId="@Model.PropertyId" asp-route-url="@currentUrl">
+                        <span class="material-symbols-outlined material-symbols-fill" style="color:red;">
+                            favorite
+                        </span>
+                    </a>
+                }
+                if (!UserService.IsFlaged(Int32.Parse(CustomerId), Model.PropertyId))
+                {
+
+
+                    <span class="material-symbols-outlined flag-icon" id="flag-@Model.PropertyId" style="color:orange;">
+                        flag
+                    </span>
+                }
+                else
+                {
+                    <a class="shortlist-icon flag-icon" asp-controller="Property" asp-action="UnflagProperty" asp-route-url="@currentUrl" asp-route-customerid="@CustomerId" asp-route-propertyid="@Model.PropertyId">
+                        <span class="material-symbols-outlined material-symbols-fill" style="color:orange;">
+                            flag
+                        </span>
+                    </a>
+                }
+
+            }
+        }
+        else
+        {
+            <a class="shortlist-icon" asp-controller="Account" asp-action="Login">
+                <span class="material-symbols-outlined" style="color:red;">
+                    favorite
+                </span>
+            </a>
+
+            <a class="shortlist-icon flag-icon" asp-controller="Account" asp-action="Login" >
+                <span class="material-symbols-outlined" style="color:orange;">
+                    flag
+                </span>
+            </a>
+
+        }
+
+    }
+
+    <div class="prop-list-row" id="item-@Model.PropertyId">
+        <div class="prop-row-img">
+            <img class="prop-img" src="@Model.ImageUrlString[0]" alt="Property Picture" />
+        </div>
+        <div class="prop-row-info">
+
+            <div class="prop-top">
+                <h2 class="prop-price accent">₹ @Model.Price</h2>
+                <div class="prop-address">
+                    <span class="material-symbols-outlined">
+                        location_on
+                    </span>
+                    <span><b>@Model.Type</b>, @Model.PropertyAddress</span>
+                </div>
+            </div>
+            <div class="prop-bottom">
+                <div class="prop-info">
+                    <div class="prop-info-icon">
+                        <img class="prop-icon" src="~/assets/bed.svg" alt="" />
+                    </div>
+                    <div class="prop-info-cont">
+                        <span class="prop-info-head">Rooms</span>
+                        <span class="prop-info-info">@Model.Rooms</span>
+                    </div>
+                </div>
+                <div class="prop-info">
+                    <div class="prop-info-icon">
+                        <img class="prop-icon" src="~/assets/area.svg" />
+                    </div>
+                    <div class="prop-info-cont">
+                        <span class="prop-info-head">Area</span>
+                        <span class="prop-info-info">@Model.Area sq.</span>
+                    </div>
+                </div>
+                <div class="prop-info">
+                    <div class="prop-info-icon">
+                        <img class="prop-icon" src="~/assets/rupee.svg" />
+                    </div>
+                    <div class="prop-info-cont">
+                        <span class="prop-info-head">Deposit</span>
+                        <span class="prop-info-info">@Model.Deposit</span>
+                    </div>
+                </div>
+                <div class="prop-info">
+                    <div class="prop-info-icon">
+                        <img class="prop-icon" src="~/assets/dresser.svg" />
+                    </div>
+                    <div class="prop-info-cont">
+                        <span class="prop-info-head">Furnishing</span>
+                        <span class="prop-info-info">@Model.Furnishing</span>
+                    </div>
+                </div>
+                @if (currentUrl == approvalrequest)
+                {
+                    <a asp-action="ViewPropertyPaper" asp-controller="Admin" asp-route-PropertyId="@Model.PropertyId" style="position:absolute;right:2%;bottom:5%; color:blue">View Documents</a>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+
+    $('#flag-@Model.PropertyId').click(function () {
+        
+        $("#popup-form").removeClass("hidden");
+        $.ajax({
+            url: '@Url.Action("Partial", "Property")',
+            type: 'GET',
+            data: {
+                id: @Model.PropertyId,
+                url: '@currentUrl'
+            },
+            success: function (result) {
+                $('#popup-form').html(result);
+            }
+        });
+
+
+
+    });
+
+
+    $('#item-@Model.PropertyId').on('click', function () {
+        if ('@currentUrl' == '@Url.Action("SentRequests", "Customer")') {
+            window.location.href = '/Customer/ListOfCustomerInqueries?propertyid=' + @Model.PropertyId + '&ownerid=' + @Model.UserId;
+        } else if ('@currentUrl' == '@Url.Action("Enquries", "Owner")') {
+            window.location.href = '/Owner/InqueryCustomerList?propertyid=' + @Model.PropertyId;
+        }
+        else if ('@currentUrl' == '@Url.Action("SentRequests", "Owner")') {
+            window.location.href = '/Owner/ListOfCustomerInqueries?propertyid=' + @Model.PropertyId + '&ownerid=' + @Model.ReceiverId;
+        }
+        else {
+            window.location.href = '/Property/Detail?id=' + @Model.PropertyId;
+        }
+
+
+    });
+
+
+
+</script>
+
+

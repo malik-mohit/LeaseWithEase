@@ -1,0 +1,201 @@
+﻿@model Model.PropertyModel;
+@{
+    ViewData["Title"] = "List";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<div class="login">
+    <h2 class="login-heading">List Property</h2>
+    <p class="login-subheading">
+        List Your Property
+    </p>
+    <form class="login-form" enctype="multipart/form-data" asp-controller="property" asp-action="list" method="post">
+
+        <div class="form-row">
+            <label>Address</label>
+            <input class="input input-full" type="text" asp-for="PropertyAddress" placeholder="HOUSE / FLAT / APARTMENT">
+            @Html.ValidationMessageFor(Model=>Model.PropertyAddress,"", new { @class = "small" })
+        </div>
+        <div class="form-row">
+            <div class="half-form">
+                <div class="input-half">
+                    <label for="State">State</label>
+                    <select class="input" id="SelectedStateId" asp-for="StateId" asp-items="@(new SelectList(@ViewBag.State, "StateId", "StateName"))">
+                        <option value='-1'>Select a State</option>
+                    </select>
+                    @Html.ValidationMessageFor(Model=>Model.StateName,"", new { @class = "small" })
+                </div>
+                <div class="input-half">
+                    <label for="City">City</label>
+                    <select class="input" id="SelectedCityId" asp-for="CityId">
+                        <option value="-1">Select a City</option>
+                    </select>
+                    @Html.ValidationMessageFor(Model=>Model.CityName,"", new { @class = "small" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="half-form">
+                <div class="input-half">
+                    <label for="Price">Price</label>
+                    <input class="input" type="text" asp-for="Price" placeholder="₹ 00000">
+                    @Html.ValidationMessageFor(Model=>Model.Price,"", new { @class = "small" })
+                </div>
+                <div class="input-half">
+                    <label for="Deposit">Deposit</label>
+                    <input class="input" type="text" asp-for="Deposit" placeholder="₹ 00000" />
+                    @Html.ValidationMessageFor(Model=>Model.Deposit,"", new { @class = "small" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="half-form">
+                <div class="input-half">
+                    <label for="Area">Area</label>
+                    <input class="input" type="text" asp-for="Area" placeholder="2000">
+                    @Html.ValidationMessageFor(Model=>Model.Area,"", new { @class = "small" })
+                </div>
+                <div class="input-half">
+                    <label for="Rooms">Rooms</label>
+                    <input class="input" type="text" asp-for="Rooms" placeholder="4" />
+                    @Html.ValidationMessageFor(Model=>Model.Rooms,"", new { @class = "small" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="half-form">
+                <div class="input-half">
+                    <label for="Type">Type</label>
+                    <select class="input" asp-for="Type">
+                        <option value=@null>Select a Category</option>
+                        <option value="apartment">Apartment</option>
+                        <option value="office">Office</option>
+                        <option value="shop">Shop</option>
+                        <option value="studio">Studio</option>
+                        <option value="villa">Shop</option>
+                    </select>
+                    @Html.ValidationMessageFor(Model=>Model.Type,"", new { @class = "small" })
+                </div>
+                <div class="input-half">
+                    <label for="Furnishing">Furnishing</label>
+                    <select class="input" asp-for='Furnishing'>
+                        <option value="@null">Select a Category</option>
+                        <option value="semifurnished">Semi-Furnished</option>
+                        <option value="fullfurnished">Full-Furnished</option>
+                        <option value="raw">Raw</option>
+                    </select>
+                    @Html.ValidationMessageFor(Model=>Model.Furnishing,"", new { @class = "small" })
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="form-row">
+            <span>
+                Upload Property Photos
+            </span>
+            <label class="choose-files" for="property-photos">
+                <div id="property-image">Choose Files</div>
+                <span class="material-symbols-outlined">
+                    upload
+                </span>
+            </label>
+            <input asp-for="ImageUrl" type="file" accept="image/*" multiple class="fileType" id="property-photos" hidden>
+            <div id="image-error" class="small" style="display:none">Please select at least 4 images.</div>
+            @Html.ValidationMessageFor(Model=>Model.ImageUrl,"", new { @class = "small" })
+
+        </div>
+        <div class="form-row">
+            <span>
+                Upload Property Papers
+            </span>
+            <label class="choose-files" for="property-papers">
+                <div id="property-paper">Choose Files</div>
+                <span class="material-symbols-outlined">
+                    upload
+                </span>
+            </label>
+            <input type="file" asp-for="PropertyPaper" accept="application/pdf" multiple id="property-papers" hidden>
+            @Html.ValidationMessageFor(Model=>Model.PropertyPaper,"", new { @class = "small" })
+        </div>
+
+        <div class="login-btns-cont">
+            <button class="login-btn" type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+
+    var imagesInput = document.getElementById('property-photos');
+    imagesInput.addEventListener('change', function () {
+        if (imagesInput.files.length < 4) {
+
+            document.getElementById('image-error').style.display = 'block';
+            imagesInput.setCustomValidity('Please select at least 4 images.');
+            imagesInput.classList.add('is-invalid');
+        } else {
+
+            document.getElementById('property-image').innerHTML = imagesInput.files.length + " files selected";
+            document.getElementById('image-error').style.display = 'none';
+            imagesInput.setCustomValidity('');
+            imagesInput.classList.remove('is-invalid');
+        }
+    });
+
+    var propertypaperInput = document.getElementById('property-papers');
+    propertypaperInput.addEventListener('change', function () {
+        document.getElementById('property-paper').innerHTML = propertypaperInput.files.length + " document selected";
+    });
+
+    $(function () {
+        $('#SelectedStateId').change(function () {
+            var StateId = $(this).val();
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetCityList", "Account")",
+                data: { StateId: StateId },
+                success: function (data) {
+                    var cityList = $('#SelectedCityId');
+                    cityList.empty();
+                    cityList.append($(' <option value="-1">Select a City</option>'))
+                    $.each(data, function (i, city) {
+                        cityList.append($('<option value="' + city.cityId + '">' + city.cityName + '</option>'));
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+
+
+    $('input').click(function () {
+        const nodeList = document.querySelectorAll(".small");
+        for (let i = 0; i < nodeList.length; i++) {
+            nodeList[i].innerHTML = "";
+            nodeList[i].style.display = "none";
+        }
+    });
+
+    $('select').click(function () {
+        const nodeList = document.querySelectorAll(".small");
+        for (let i = 0; i < nodeList.length; i++) {
+            nodeList[i].innerHTML = "";
+            nodeList[i].style.display = "none";
+        }
+    });
+
+
+
+
+</script>
+
+

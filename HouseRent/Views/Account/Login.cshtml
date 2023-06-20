@@ -1,0 +1,93 @@
+﻿@model Model.LoginModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+
+<div class="login">
+    @if (ViewBag.SuccessMessage != null)
+    {
+        <div id="success-message">
+            @ViewBag.SuccessMessage
+        </div>
+    }
+    <h2 class="login-heading">Welcome Back!</h2>
+    <p class="login-subheading">
+        Login to your account
+    
+    </p>
+    <form id="login" class="login-form" method="post" asp-action="Login">
+        <div asp-validation-summary="ModelOnly" class="small"></div>
+        <div class="form-row">
+            <span>Email</span>
+            <input id="login-email" class="input input-full" asp-for="Email" />
+            <span asp-validation-for="Email" class="small"></span>
+        </div>
+        <div class="form-row">
+            <span>Password</span>
+            <input id="login-password" type="password" class="input input-full" asp-for="Password" />
+            <span asp-validation-for="Password" class="small"></span>
+        </div>
+        <div class="form-action">
+            <div class="remember-cont">
+                <input class="input-check" type="checkbox" />
+                <span>Remember Me</span>
+            </div>
+            <div class="forget">
+                <a id="forget-password" class="forget-link" >Forgot Password? </a>
+            </div>
+        </div>
+        <div class="login-btns-cont">
+            <button class="login-btn">Login</button>
+        </div>
+    </form>
+    <div class="reg-link">
+        <span>Don't have an account? </span>
+        <a asp-controller="Account" asp-action="Register" style="text-decoration:none; color:dodgerblue;">Sign Up</a>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        if ($("#success-message").length > 0) {
+
+            setTimeout(function () {
+                $("#success-message").fadeIn();
+            }, 1000);
+
+
+            setTimeout(function () {
+                $("#success-message").fadeOut();
+            }, 8000);
+        }
+    });
+    $('#forget-password').click(function () {
+        var element = document.getElementById("popup-form");
+        element.classList.remove("hidden");
+
+        $.ajax({
+            url: '@Url.Action("Partial", "Account")',
+            success: function (result) {
+                $('#popup-form').html(result);
+            }
+        })
+
+    })
+
+    $('#login-password').click(function () {
+        document.querySelector('small').innerHTML = "";
+    });
+
+    $('#login-email').click(function () {
+        document.querySelector('small').innerHTML = "";
+
+
+    });
+
+
+</script>

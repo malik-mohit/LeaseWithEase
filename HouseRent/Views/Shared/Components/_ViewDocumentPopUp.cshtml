@@ -1,0 +1,15 @@
+﻿@model string
+
+<div style="display:flex; align-items:center; justify-content:center;width:100vw;height:100vh;position:relative">
+    <img src="@Model" style="max-width:100%;height:auto"/>
+    <span class="material-symbols-outlined cross" style="position:absolute;top:5%;right:5%;font-weight:900; color:white;font-size:2rem;z-index:99" onclick="Close()">
+        close
+    </span>
+</div>
+
+<script>
+    function Close() {
+        var element = document.getElementById("popup-form");
+        element.classList.add("hidden");
+    }
+</script>

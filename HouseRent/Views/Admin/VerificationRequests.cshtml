@@ -1,0 +1,8 @@
+﻿@model List<Model.CustomerModel>
+@{
+    ViewData["Title"] = "VerificationRequests";
+    Layout = "~/Views/Shared/Dashboard/_AdminDashboardLayout.cshtml";
+}
+
+@*<h2 class="dash-heading">Verification Requests</h2>*@
+@await Html.PartialAsync("Components/_UserList", Model)

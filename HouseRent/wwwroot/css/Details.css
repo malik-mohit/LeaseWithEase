@@ -1,0 +1,262 @@
+﻿
+
+.detail-wrapper {
+    margin: 0 auto;
+    display: flex;
+    width: fit-content;
+}
+
+.detail-content {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 5rem 0 2.5rem 0;
+    margin: 0 auto;
+}
+
+.prop-head-cont {
+    display: flex;
+    justify-content: space-between
+}
+
+.prop-detail-head {
+    margin: 0;
+}
+
+
+.location-cont {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.location-icon {
+    font-size: 16px;
+}
+
+.prop-detail-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #346D6D;
+}
+
+.prop-images-cont {
+    display: grid;
+    grid-template-areas:
+        "img2 img1 img1 img1"
+        "img3 img1 img1 img1"
+        "img4 img1 img1 img1";
+    gap: 1rem;
+}
+
+.img1 {
+    grid-area: img1;
+}
+
+.img2 {
+    grid-area: img2;
+}
+
+.img3 {
+    grid-area: img3;
+}
+
+.img4 {
+    grid-area: img4;
+}
+
+.prop-image-wrapper {
+    display: flex;
+}
+
+.prop-image {
+    width: 100%;
+}
+
+
+.prop-sec-cont {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+
+.break {
+    margin: 0;
+    color: #B4B4B4;
+    width: 100%;
+}
+
+.prop-sec-heading {
+    font-size: 1.5rem;
+    border-radius: 8px 8px 0 0;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.prop-sec-body {
+}
+
+.prop-detail-desc {
+    margin: 0;
+}
+
+.prop-info {
+    display: flex;
+    align-items: center;
+    border-left: 3px solid #346D6D;
+}
+
+.prop-info-cont {
+    display: flex;
+    flex-direction: column;
+}
+
+.prop-info-head {
+    font-weight: 700;
+}
+
+.prop-info-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px
+}
+
+.prop-feature-cont {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.detail-bottom-sec {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 5fr 2fr;
+    gap: 6rem;
+}
+
+.detail-action-cont {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.action-btn-cont {
+    display: grid;
+    grid-auto-flow: column;
+    gap: 1rem;
+}
+
+.contact-owner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: 20px 21px 40px  rgba(0, 0, 0, 0.25);
+    padding: 2rem;
+}
+
+
+.owner-detail-cont{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.owner-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.owner-profile {
+    display: flex;
+    border-radius: 50%;
+    width: 180px;
+    height: 180px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.request-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+}
+
+.request-form-input {
+    padding: 0.5rem 0.75rem;
+}
+
+.request-form-input-big {
+    padding: 0.5rem 0.75rem;
+    min-height: 100px;
+    resize:none;
+}
+
+.shortlist-button {
+    padding-block: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: #EF798A;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.flag-button {
+    padding-block: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    border: 2px solid #EF798A;
+    background-color: white;
+    color: #EF798A;
+    width: 100%;
+}
+
+.approve-button {
+    padding-block: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    border: 2px solid #70e000;
+    background-color: white;
+    color: #70e000;
+    width:100%;
+}
+
+.submit-button {
+    padding-block: 0.75rem;
+    background-color: #346D6D;
+    color: white;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+
+}
+
+@media only screen and (min-width: 1600px) {
+    .detail-content {
+        width: 1300px;
+    }
+}

@@ -1,0 +1,24 @@
+﻿@model dynamic
+@using System.Security.Claims;
+@{
+    var customerid = Convert.ToInt32(((ClaimsIdentity)User.Identity).Claims.FirstOrDefault(x => x.Type == "CustomerId")?.Value);
+}
+
+
+@if (Model.customer.Count > 0)
+{
+    <div class="prop-item-cont" style="gap:1rem">
+        @foreach (var item in Model.customer)
+        {
+            if (item.CustomerId != customerid)
+                @await Html.PartialAsync("Components/_ChatItem",new{customer=item, propertyid=Model.propertyid})
+        }
+    </div>
+}
+else
+{
+    <div style="display:flex;justify-content:center;align-items:center;height:100vh;width:100%;flex-direction:column;">
+        <img src="/assets/nothing.png" />
+        <h1>No Property to Show Here</h1>
+    </div>
+}

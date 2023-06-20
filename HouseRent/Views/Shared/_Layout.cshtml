@@ -1,0 +1,210 @@
+﻿@using HouseRent.Utility;
+@using System.Security.Claims;
+@using ServiceLayer.Services;
+
+
+@{
+    var ProfilePic = "";
+    var CustomerId = ((ClaimsIdentity)User.Identity).Claims.Where(x => x.Type == "CustomerId").FirstOrDefault()?.Value;
+    var Name = ((ClaimsIdentity)User.Identity).Claims.Where(x => x.Type == "Name").FirstOrDefault()?.Value;
+    var Email = ((ClaimsIdentity)User.Identity).Claims.Where(x => x.Type == "Email").FirstOrDefault()?.Value;
+    var Role = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+    var home = Url.Action("Index", "HouseRent");
+    var currentUrl = ViewContext.HttpContext.Request.Path;
+    if (CommonService.GetProfilePicUrl(Convert.ToInt32(CustomerId)) != null)
+    {
+        ProfilePic = CommonService.GetProfilePicUrl(Convert.ToInt32(CustomerId));
+    }
+    else
+    {
+        ProfilePic = "/assets/profile.jpg";
+    }
+}
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HouseRent</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="~/css/global.css" rel="stylesheet" />
+    <link href="~/css/global.css" rel="stylesheet" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/HouseRent.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/details.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/search.css" asp-append-version="true" />
+
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48
+        }
+
+        .material-symbols-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48
+        }
+    </style>
+
+</head>
+<body onload="setnav()">
+    <div style="height: 100vh;position:relative">
+        <div id="popup-form" class="popup-form hidden">
+        </div>
+        @if (currentUrl == home)
+        {
+            <header class="pos" id="header">
+
+                <nav class="nav nav-small" id="nav">
+
+                    <a asp-action="Index" asp-controller="HouseRent" class="logo">
+                        <img src="~/assets/images/logo.svg" />
+                    </a>
+
+
+
+                    <ul class="options">
+                        <li>Home</li>
+                        <li>Rent</li>
+                        @if (CommonService.isVerified(Convert.ToInt32(CustomerId)) == 2)
+                        {
+                            <li><a asp-action="List" asp-controller="Property">List</a></li>
+                        }
+                        else
+                        {
+                            <li>List</li>
+
+                        }
+                        <li>About</li>
+                    </ul>
+
+                    @if (Role.Count() == 0)
+                    {
+                        <span class="login-nav-btn profile-btn">
+                            <a asp-controller="Account" asp-action="Login" class="login-nav-link" style="color:white">
+                                LOGIN
+                            </a>
+                        </span>
+                    }
+                    else
+                    {
+                        string controller = "";
+                        string action = "";
+                        var userRoles = ((ClaimsIdentity)User.Identity).Claims
+                        .Where(c => c.Type == ClaimTypes.Role)
+                        .Select(c => c.Value).ToList();
+                        if (userRoles.Contains(Enums.UserRoles.Admin.GetEnumDescription()))
+                        {
+                            controller = "Admin";
+                            action = "ApprovalRequests";
+                        }
+                        else if (userRoles.Contains(Enums.UserRoles.Customer.GetEnumDescription()))
+                        {
+                            controller = "Customer";
+                            action = "LikedProperties";
+                        }
+                        else if (userRoles.Contains(Enums.UserRoles.Owner.GetEnumDescription()))
+                        {
+                            controller = "Owner";
+                            action = "LikedProperties";
+                        }
+
+
+                        <div class="owner-profile-wrapper profile-btn">
+                            <a class="owner-profile" style="width:40px;height:40px" asp-action="@action" asp-controller="@controller">
+                                <img src="@ProfilePic" style="border-radius:50%" />
+                            </a>
+                        </div>
+                    }
+                    <span class="material-symbols-outlined hamburger">
+                        menu
+                    </span>
+                </nav>
+            </header>
+        }
+        else
+        {
+            <header id="header">
+                <nav class="nav nav-full" id="nav">
+                    <a asp-action="Index" asp-controller="HouseRent" class="logo">
+                        <img src="~/assets/images/logo.svg" />
+                    </a>
+
+                    <ul class="options">
+                        <li>Home</li>
+                        <li>Rent</li>
+                        @if (CommonService.isVerified(Convert.ToInt32(CustomerId)) == 2)
+                        {
+                            <li><a asp-action="List" asp-controller="Property">List</a></li>
+                        }
+                        else
+                        {
+                            <li>List</li>
+
+                        }
+
+                        <li>About</li>
+                    </ul>
+
+                    @if (Role.Count() == 0)
+                    {
+                        <span class="login-nav-btn">
+                            <a asp-controller="Account" asp-action="Login" class="login-nav-link" style="color:white">
+                                LOGIN
+                            </a>
+                        </span>
+                    }
+                    else
+                    {
+                        string controller = "";
+                        string action = "";
+                        var userRoles = ((ClaimsIdentity)User.Identity).Claims
+                        .Where(c => c.Type == ClaimTypes.Role)
+                        .Select(c => c.Value).ToList();
+                        if (userRoles.Contains(Enums.UserRoles.Admin.GetEnumDescription()))
+                        {
+                            controller = "Admin";
+                            action = "ApprovalRequests";
+                        }
+                        else if (userRoles.Contains(Enums.UserRoles.Customer.GetEnumDescription()))
+                        {
+                            controller = "Customer";
+                            action = "LikedProperties";
+                        }
+                        else if (userRoles.Contains(Enums.UserRoles.Owner.GetEnumDescription()))
+                        {
+                            controller = "Owner";
+                            action = "LikedProperties";
+                        }
+
+
+                        <div class="owner-profile-wrapper">
+                            <a class="owner-profile" style="width:40px;height:40px" asp-action="@action" asp-controller="@controller">
+                                <img src="@ProfilePic" style="border-radius:50%" />
+                            </a>
+                        </div>
+                    }
+                </nav>
+            </header>
+        }
+        <div class="main">
+            <main role="main" style="margin: 0 auto">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/slider.js"></script>
+</body>
+
+</html>

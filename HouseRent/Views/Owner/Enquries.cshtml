@@ -1,0 +1,19 @@
+﻿@model List<Model.PropertyModel>
+@{
+    ViewData["Title"] = "Enquries";
+    Layout = "~/Views/Shared/Dashboard/_OwnerDashboardLayout.cshtml";
+}
+
+
+
+@if (Model.Count >= 0)
+{
+    @await Html.PartialAsync("Components/_PropertyList", Model)
+}
+else
+{
+    <div style="display:flex;justify-content:center;align-items:center;height:100vh;width:100%;flex-direction:column;">
+        <img src="/assets/nothing.png" />
+        <h1>No Property to Show Here</h1>
+    </div>
+}

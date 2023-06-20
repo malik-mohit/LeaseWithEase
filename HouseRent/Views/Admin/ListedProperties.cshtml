@@ -1,0 +1,9 @@
+﻿@model List<Model.PropertyModel>
+@{
+    ViewData["Title"] = "ListedProperties";
+    Layout = "~/Views/Shared/Dashboard/_AdminDashboardLayout.cshtml";
+}
+
+@*<h2 class="dash-heading">Listed Properties</h2>*@
+@await Html.PartialAsync("Components/_PropertyList", Model)
+

@@ -1,0 +1,13 @@
+﻿@model List<Model.PropertyModel>
+@using System.Security.Claims;
+@{
+    ViewData["Title"] = "SentRequests";
+    Layout = "~/Views/Shared/Dashboard/_OwnerDashboardLayout.cshtml";
+    var CustomerId = ((ClaimsIdentity)User.Identity).Claims.Where(x => x.Type == "CustomerId").FirstOrDefault()?.Value;
+}
+
+
+<h2 class="dash-heading">Sent Requests</h2>
+@await Html.PartialAsync("Components/_PropertyList", Model)
+
+

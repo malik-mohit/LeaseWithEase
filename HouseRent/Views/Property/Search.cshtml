@@ -1,0 +1,286 @@
+﻿@model Model.SearchModel
+@{
+    ViewData["Title"] = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<style>
+    .clearall:hover {
+        cursor: pointer;
+    }
+</style>
+<div class="search-sec">
+    <div class="search-bar-cont">
+        <form class="search-bar-side" asp-action="Search" asp-controller="Property" method="get">
+            <div class="filter-header">
+                <span class="filter-sec-heading">Filters</span>
+                <span style="color:red">clear all</span>
+            </div>
+            <div class="filter-opt-cont">
+                <div class="filter-row">
+                    <label class="filter-heading">
+                        State
+                    </label>
+
+                    <select class="input" id="SelectedStateIdSearch" asp-for="StateId" asp-items="@(new SelectList(@ViewBag.State, "StateId", "StateName"))">
+                        <option value='-1'>Select a State</option>
+                    </select>
+
+                </div>
+                <div class="filter-row">
+                    <label class="filter-heading">City</label>
+                    <select class="input" id="SelectedCityIdSearch" asp-for="CityId" asp-items="@(new SelectList(@ViewBag.City, "CityId", "CityName"))">
+                        <option value="-1">Select a City</option>
+                    </select>
+                </div>
+                <div class="filter-row">
+                    <span class="filter-heading">Category</span>
+                    <div>
+                        @*<div>
+                            <input type="checkbox" value="apartment" name="type" id="all-checkbox"  />
+                            <label>All</label>
+                        </div>*@
+                        <div>
+                            <input type="checkbox" value="apartment" name="type" class="type-checkbox"  />
+                            <label>Apartment</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" value="office" name="type" class="type-checkbox"  />
+                            <label>Office</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" value="shop" name="type" class="type-checkbox"  />
+                            <label>Shop</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" value="store" name="type" class="type-checkbox" />
+                            <label>store</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" value="villa" name="type" class="type-checkbox"  />
+                            <label>Villa</label>
+                        </div>
+                       
+                    </div>
+
+                </div>
+                <div class="filter-row">
+                    <span class="filter-heading">Furnishing</span>
+                    <div>
+                        <div>
+                            <input type="checkbox" value="fully-furnished" name="furnishing" />
+                            <label>Fully-furnished</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" value="semi-furnished" name="furnishing" />
+                            <label>Semi-furnished</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" value="raw" name="furnishing" />
+                            <label>Raw</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-row">
+                    <span class="filter-heading">Rooms</span>
+                    <div>
+                        <div>
+                            <input type="checkbox" value="1" name="rooms" />
+                            <label>1BHK</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" value="2" name="rooms" />
+                            <label>2BHK</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" value="3" name="rooms" />
+                            <label>3BHK</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" value="4" name="rooms" />
+                            <label>3BHK+</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-row">
+                    <span class="filter-heading">
+                        Budget
+                    </span>
+                    <div>
+                        <div class="price-input" id="price-input-budget">
+                            <div class="field">
+                                <span style="font-weight:700;">Min</span>
+                                <input type="number" class="input-slider" value="5000" name="minPrice" id="minP">
+                            </div>
+                            <div class="separator"></div>
+                            <div class="field" style="align-items:flex-end">
+                                <span style="font-weight:700">Max</span>
+                                <input type="number" class="input-slider" value="100000" name="maxPrice" id="maxP">
+                            </div>
+                        </div>
+                        <div class="slider" id="slider-budget">
+                            <div class="progress"></div>
+                        </div>
+                        <div class="range-input" id="range-input-budget">
+                            <input type="range" class="range-min" min="5000" max="100000" value="5000" step="5000">
+                            <input type="range" class="range-max" min="5000" max="100000" value="100000" step="5000">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="filter-row">
+                    <span class="filter-heading">
+                        Area
+                    </span>
+                    <div>
+                        <div class="price-input" id="price-input-area">
+                            <div class="field">
+                                <span style="font-weight:700;">Min</span>
+                                <input type="number" class="input-slider" value="500" name="minArea">
+                            </div>
+                            <div class="separator"></div>
+                            <div class="field" style="align-items:flex-end">
+                                <span style="font-weight:700">Max</span>
+                                <input type="number" class="input-slider" value="10000" name="maxArea">
+                            </div>
+                        </div>
+                        <div class="slider" id="slider-area">
+                            <div class="progress"></div>
+                        </div>
+                        <div class="range-input" id="range-input-area">
+                            <input type="range" class="range-min" min="500" max="10000" value="500" step="500">
+                            <input type="range" class="range-max" min="500" max="10000" value="10000" step="500">
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="filter-btn-cont">
+                <button class="apply-filter-button" type="submit">
+                    Apply Filters
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="search-list">
+        <div class="search-list-wrapper">
+            @await Html.PartialAsync("Components/_PropertyList", Model.Property)
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+
+    $(function () {
+        $('#SelectedStateIdSearch').change(function () {
+            var StateId = $(this).val();
+
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetCityList", "Account")",
+                data: { StateId: StateId },
+                success: function (data) {
+
+                    var cityList = $('#SelectedCityIdSearch');
+                    cityList.empty();
+                    cityList.append($(' <option value="-1">Select a City</option>'))
+                    $.each(data, function (i, city) {
+                        cityList.append($('<option value="' + city.cityId + '">' + city.cityName + '</option>'));
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+
+
+        });
+    });
+
+    function setFilterStates() {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+
+        // Set the state of the type checkboxes based on the "type" query string parameter
+        const typeCheckboxes = document.querySelectorAll('input[type="checkbox"][name="type"]');
+        typeCheckboxes.forEach(function (checkbox) {
+            const types = urlParams.getAll('type');
+            if (types.includes(checkbox.value)) {
+                checkbox.checked = true;
+            }
+        });
+        
+        const furnishingCheckboxes = document.querySelectorAll('input[type="checkbox"][name="furnishing"]');
+        furnishingCheckboxes.forEach(function (checkbox) {
+            const furnishing = urlParams.getAll('furnishing');
+            if (furnishing.includes(checkbox.value)) {
+                checkbox.checked = true;
+            }
+        });
+        
+        const roomsCheckboxes = document.querySelectorAll('input[type="checkbox"][name="rooms"]');
+        roomsCheckboxes.forEach(function (checkbox) {
+            const rooms = urlParams.getAll('rooms');
+            if (rooms.includes(checkbox.value)) {
+                checkbox.checked = true;
+            }
+        });
+
+        // Set the state of the "StateId" and "CityId" selects based on the corresponding query string parameters
+        //const stateSelect = document.querySelector('select[name="StateId"]');
+        //const citySelect = document.querySelector('select[name="CityId"]');
+        //const stateId = urlParams.get('StateId');
+        //const cityId = urlParams.get('CityId');
+        //if (stateId !== null) {
+        //    stateSelect.value = stateId;
+        //}
+        //if (cityId !== null) {
+        //    citySelect.value = cityId;
+        //}
+
+        // Set the state of the "minPrice" and "maxPrice" inputs based on the corresponding query string parameters
+        const minPriceInput = $("#minP");
+        const maxPriceInput = $("#maxP");
+        const minPrice = urlParams.get('minPrice');
+        const maxPrice = urlParams.get('maxPrice');
+        if (minPrice !== null) {
+            minPriceInput.value = minPrice;
+        }
+        if (maxPrice !== null) {
+            maxPriceInput.value = maxPrice;
+        }
+
+        // Set the state of the "minArea" and "maxArea" inputs based on the corresponding query string parameters
+        const minAreaInput = document.querySelector('input[type="number"] input[name="minArea"]');
+        const maxAreaInput = document.querySelector('input[type="number"] input[name="maxArea"]');
+        const minArea = urlParams.get('minArea');
+        const maxArea = urlParams.get('maxArea');
+        if (minArea !== null) {
+            minAreaInput.value = minArea;
+        }
+        if (maxArea !== null) {
+            maxAreaInput.value = maxArea;
+        }
+    }
+
+    // Call the setFilterStates function when the page is loaded
+    window.addEventListener('load', setFilterStates);
+
+
+    //$(document).ready(function () {
+
+    //    const allCheckbox = $('#all-checkbox');
+    //    const checkboxes = $('.type-checkbox');
+    //    allCheckbox.on('change', function () {
+    //        const isChecked = allCheckbox.prop('checked');
+    //        checkboxes.prop('checked', isChecked);
+    //    });
+    //});
+
+
+
+</script>

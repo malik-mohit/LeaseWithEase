@@ -1,0 +1,20 @@
+﻿@model List<Model.PropertyModel>
+@{
+    ViewData["Title"] = "SentRequests";
+    Layout = "~/Views/Shared/Dashboard/_CustomerDashboardLayout.cshtml";
+}
+@*
+<ul>
+    @foreach (var item in Model)
+    {
+            <a asp-action="ListOfCustomerInqueries" asp-controller="Customer" asp-route-propertyid="@item.PropertyId" asp-route-ownerid="@item.UserId">
+                <div style="border:2px solid black; display:flex; align-items:center; justify-content:center;  height:6rem; width:60%;">
+                <li>@item.PropertyId</li>
+                    </div>
+
+        </a>
+    }
+</ul>*@
+
+<h2 class="dash-heading">Liked Properties</h2>
+@await Html.PartialAsync("Components/_PropertyList", Model)

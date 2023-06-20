@@ -1,0 +1,84 @@
+﻿@model Model.PropertyModel
+@using System.Security.Claims;
+@{
+    ViewData["Title"] = "ListOfCustomerInqueries";
+    Layout = "~/Views/Shared/Dashboard/_CustomerDashboardLayout.cshtml";
+    var UserId = Convert.ToInt32(((ClaimsIdentity)User.Identity).Claims.FirstOrDefault(x => x.Type == "CustomerId")?.Value);
+    var Name = Convert.ToString(((ClaimsIdentity)User.Identity).Claims.FirstOrDefault(x => x.Type == "Name")?.Value);
+}
+
+
+
+
+<div style="display:flex;flex-direction:column;height:100vh">
+    <div class="chat-header">
+
+        <div class="user-item" id="item-@Model.Customer.CustomerId">
+            <div class="user-info-cont">
+                <div class="user-profile">
+                </div>
+                <div class="user-item-info">
+                    <div class="username">@Model.Customer.Name</div>
+                    <div>@Model.Customer.Email</div>
+                </div>
+            </div>
+
+            <span class="material-symbols-outlined" id="flag-@Model.Customer.CustomerId">
+                flag
+            </span>
+
+        </div>
+    </div>
+    <div class="chat-section" id="chat-display">
+        <div class="chat-display" >
+
+            @foreach (var item in Model.QueryList)
+            {
+                if (UserId == item.SenderId)
+                {
+                    <span style=" display:flex;flex-direction:column;gap:1rem;align-self: flex-end;background-color: #4CAF50;padding: 10px; border-radius: 10px;margin: 10px;">
+                        <span style="margin:18px;">
+                            @item.Message
+                        </span>
+                        <span style="font-size:8px"> @item.SentOn.ToString("hh:mm")</span>
+                    </span>
+                }
+                else
+                {
+                    <span style=" display:flex;flex-direction:column;gap:1rem;align-self: flex-start;background-color: #ddd;padding: 10px; border-radius: 10px;margin: 10px;">
+                        <span style="margin:18px;">
+                            @item.Message
+                        </span>
+                        <span style="font-size:8px"> @item.SentOn.ToString("hh:mm")</span>
+                    </span>
+
+                }
+            }
+
+        </div>
+
+    </div>
+    <div class="chat-input">
+        <form asp-action="SendResponse" asp-controller="Customer" method="post" class="chat-input-wrapper">
+            <textarea type=" text" placeholder="Enter your Message" asp-for="Message" class="chat-text-area"></textarea>
+            <input type="hidden" asp-for="SenderId" />
+            <input type="hidden" asp-for="ReceiverId" />
+            <input type="hidden" asp-for="PropertyId" />
+            <button type="submit" class="send-chat-button">
+                <span class="material-symbols-outlined">
+                    send
+                </span>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script>
+  document.onload(){
+      alert("hi")
+  }
+</script>
+
+

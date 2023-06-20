@@ -1,0 +1,161 @@
+﻿
+*,
+*::before,
+*::after {
+    -webkit-box-sizing: inherit;
+    -moz-box-sizing: inherit;
+    box-sizing: inherit;
+}
+
+:root {
+    --sidebar-width: 24rem;
+}
+
+html {
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.prop-item-cont {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.prop-list-row {
+    display: flex;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 12px;
+    gap: 2rem;
+    min-height: 190px;
+}
+
+.prop-row-img {
+    width: 250px;
+    height: 170px;
+    display: flex;
+}
+
+.prop-img {
+    width: 100%;
+}
+
+.prop-info-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.prop-row-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around
+}
+
+.prop-price {
+    margin: 0;
+}
+
+.prop-address {
+    display: flex;
+    align-items: center;
+}
+
+.prop-bottom {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.prop-info {
+    display: flex;
+    align-items: center;
+}
+
+.prop-info-cont {
+    display: flex;
+    flex-direction: column;
+}
+
+.prop-info-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+}
+
+.prop.icon {
+    width: 100%;
+    height: auto;
+}
+
+.prop-info-head {
+    font-weight: 700;
+}
+
+.prop-info-info {
+    font-size: 14px;
+}
+
+.input {
+    height: 2.5rem;
+    border-radius: 8px;
+    padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+    border: 1px solid #878787;
+    transition: 0.1s ease-out;
+    width:98%;
+    align-self:center;
+}
+
+    .input:focus {
+        outline: 2px solid #346D6D;
+        border: none;
+    }
+
+.input-check {
+    margin: 0;
+}
+
+input[type=checkbox] {
+    accent-color: #346D6D;
+}
+
+.shortlist-icon {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+}
+.flag-icon {
+    position: absolute;
+    top: 24px;
+    right: 64px;
+}
+
+.small {
+    background: #ffefef;
+    color: #ff9494;
+    border-radius: 4px;
+}
+
+.property-item-wrappper:hover {
+    box-shadow: 28px 31px 40px -3px rgba(0, 0, 0, 0.25);
+    cursor:pointer
+}

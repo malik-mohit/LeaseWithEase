@@ -1,0 +1,119 @@
+
+.popup-form {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    position: fixed;
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-hover {
+}
+
+.hidden {
+    visibility: collapse;
+}
+
+header {
+    position: fixed;
+    z-index: 99;
+    width: 100%
+}
+
+.pos {
+    top: 5%;
+}
+
+.nav {
+    background-color: white;
+    display: flex;
+    padding: 0.5rem 2rem;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    box-shadow: 28px 31px 40px -3px rgba(0, 0, 0, 0.25);
+}
+
+.nav-full {
+    width: 100%;
+}
+
+.nav-small {
+    width: 80%;
+}
+
+.logo {
+    flex: 1;
+}
+
+.owner-profile-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.login-nav-btn {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.login-nav-link {
+    color: white;
+    background-color: #346D6D;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+}
+
+    .login-nav-link:hover {
+        cursor: pointer;
+        padding: 0.6rem 1.25rem;
+        text-decoration: none;
+    }
+
+.options {
+    list-style-type: none;
+    display: flex;
+    padding: 0;
+    flex: 3;
+    justify-content: center;
+    gap: 8rem;
+}
+
+    .options li a {
+        text-decoration: none;
+        color: black
+    }
+
+    .options li:hover {
+        color: #346D6D;
+    }
+
+    .options li a:hover {
+        color: inherit;
+    }
+
+.hamburger {
+    display: none;
+}
+
+.main {
+    width: 100%;
+}
+
+@media only screen and (max-width: 1500px) {
+    .hamburger {
+        display: block;
+        
+    }
+    .options{
+        display:none;
+    }
+    .profile-btn{
+        display:none;
+        
+    }
+}

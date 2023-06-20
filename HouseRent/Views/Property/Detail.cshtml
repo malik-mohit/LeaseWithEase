@@ -1,0 +1,407 @@
+﻿@using HouseRent.Utility;
+@using ServiceLayer.Services;
+@model Model.PropertyModel
+@using System.Security.Claims
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@{
+    var ProfilePic = "";
+    var Role = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+    var CustomerId = ((ClaimsIdentity)User.Identity).Claims.Where(x => x.Type == "CustomerId").FirstOrDefault()?.Value;
+    string currentUrl = ViewContext.HttpContext.Request.Path + ViewContext.HttpContext.Request.QueryString;
+    var userRoles = ((ClaimsIdentity)User.Identity).Claims
+                        .Where(c => c.Type == ClaimTypes.Role)
+                        .Select(c => c.Value).ToList();
+    if (CommonService.GetProfilePicUrl(Convert.ToInt32(Model.UserId)) != null)
+    {
+        ProfilePic = CommonService.GetProfilePicUrl(Convert.ToInt32(Model.UserId));
+    }
+    else
+    {
+        ProfilePic = "/assets/profile.jpg";
+    }
+}
+
+
+
+<div class="detail-wrapper">
+    <div class="detail-content">
+        <div class="prop-sec-cont">
+            <div class="prop-head-cont">
+                <div class="prop-head-wrapper">
+                    <h2 class="prop-detail-head">4 BHK, @Model.Type</h2>
+                    <div class="location-cont">
+                        <span class="location-icon material-symbols-outlined ">
+                            location_on
+                        </span>
+                        <span class="location-icon">
+                            @Model.PropertyAddress, @Model.CityName, @Model.StateName
+                        </span>
+                    </div>
+                </div>
+                <div class="prop-detail-price">
+                    ₹ @Model.Price
+                </div>
+            </div>
+            <div class="prop-images-cont">
+                <div class="prop-image-wrapper img1">
+                    <img src="@Model.ImageUrlString[0]" alt="House Image" class="prop-image" />
+                </div>
+                <div class="prop-image-wrapper img2">
+                    <img src="@Model.ImageUrlString[1]" alt="House Image" class="prop-image" />
+                </div>
+                <div class="prop-image-wrapper img3">
+                    <img src="@Model.ImageUrlString[2]" alt="House Image" class="prop-image" />
+                </div>
+                <div class="prop-image-wrapper img4">
+                    <img src="@Model.ImageUrlString[3]" alt="House Image" class="prop-image" />
+                </div>
+            </div>
+        </div>
+        <div class="detail-bottom-sec">
+            <div class="prop-sec-cont">
+                <div class="prop-sec-cont">
+                    <div class="prop-sec-heading">
+                        <sapn>
+                            Overview & Description
+                        </sapn>
+                        <hr class="break" />
+                    </div>
+
+                    <div class="prop-sec-body">
+                        <p class="prop-detail-desc">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eget metus id justo efficitur suscipit ut in dolor.
+                            Quisque mauris sapien, lobortis quis pretium porta, malesuada  non massa. Vestibulum
+                            vehicula a augue sed vehicula. Fusce elementum aliquet vulputate.
+                        </p>
+                    </div>
+                </div>
+                <div class="prop-sec-cont">
+                    <div class="prop-sec-heading">
+                        <span>
+                            Property Information
+                        </span>
+                        <hr class="break" />
+                    </div>
+                    <div class="prop-sec-body">
+                        <div class="prop-feature-cont">
+                            <div class="prop-info">
+                                <div class="prop-info-icon">
+                                    <img class="prop-icon" src="~/assets/bed.svg" alt="" />
+                                </div>
+                                <div class="prop-info-cont">
+                                    <span class="prop-info-head">Rooms</span>
+                                    <span class="prop-info-info">@Model.Rooms BHK</span>
+                                </div>
+                            </div>
+                            <div class="prop-info">
+                                <div class="prop-info-icon">
+                                    <img class="prop-icon" src="~/assets/area.svg" alt="" />
+                                </div>
+                                <div class="prop-info-cont">
+                                    <span class="prop-info-head">Area</span>
+                                    <span class="prop-info-info">@Model.Area Sq.</span>
+                                </div>
+                            </div>
+                            <div class="prop-info">
+                                <div class="prop-info-icon">
+                                    <img class="prop-icon" src="~/assets/rupee.svg" alt="" />
+                                </div>
+                                <div class="prop-info-cont">
+                                    <span class="prop-info-head">Deposit</span>
+                                    <span class="prop-info-info">@Model.Deposit</span>
+                                </div>
+                            </div>
+                            <div class="prop-info">
+
+                                <div class="prop-info-icon">
+                                    <img class="prop-icon" src="~/assets/dresser.svg" alt="" />
+                                </div>
+                                <div class="prop-info-cont">
+                                    <span class="prop-info-head">Furnishing</span>
+                                    <span class="prop-info-info">@Model.Furnishing</span>
+                                </div>
+                            </div>
+                            <div class="prop-info">
+                                <div class="prop-info-icon">
+                                    <img class="prop-icon" src="~/assets/bed.svg" alt="" />
+                                </div>
+                                <div class="prop-info-cont">
+                                    <span class="prop-info-head">Rooms</span>
+                                    <span class="prop-info-info">@Model.Rooms</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-action-cont">
+                <div class="action-btn-cont">
+                    @{
+
+                        if (userRoles.Contains(Enums.UserRoles.Admin.GetEnumDescription()))
+                        {
+
+                            if (!AdminService.IsBlocked(Model.PropertyId))
+                            {
+                                <button class="shortlist-button" id="block-btn">
+                                    <span>
+                                        Block
+                                    </span>
+                                    <span class="material-symbols-outlined">
+                                        block
+                                    </span>
+
+                                </button>
+                            }
+                            else
+                            {
+                                <form asp-action="UnBlockProperty" asp-controller="Admin" asp-route-propertyid="@Model.PropertyId" method="post">
+                                    <button class="shortlist-button">
+                                        <span>
+                                            Unblock
+                                        </span>
+                                        <span class="material-symbols-outlined">
+                                            block
+                                        </span>
+
+                                    </button>
+                                </form>
+
+                            }
+
+
+
+                            if (!CommonService.isListed(Model.PropertyId))
+                            {
+                                <form asp-action="ApproveProperty" asp-controller="Admin" asp-route-propertyid="@Model.PropertyId" method="post">
+                                    <button class="approve-button" type="submit">
+                                        <span>
+                                            Approve
+                                        </span>
+
+                                        <span class="material-symbols-outlined">
+                                            verified
+                                        </span>
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-action="UnList" asp-controller="Admin" asp-route-propertyid="@Model.PropertyId" method="post">
+                                    <button class="approve-button" type="submit">
+                                        <span>
+                                            Unlist
+                                        </span>
+
+                                        <span class="material-symbols-outlined">
+                                            block
+                                        </span>
+                                    </button>
+                                </form>
+                            }
+
+                        }
+                        else
+                        {
+
+                            if (CustomerId != null)
+                            {
+                                if (Model.UserId != Int32.Parse(CustomerId))
+                                {
+                                    if (UserService.IsLiked(Int32.Parse(CustomerId), Model.PropertyId))
+                                    {
+                                        <form asp-controller="Property" asp-action="LikeProperty" asp-route-PropertyId="@Model.PropertyId" asp-route-url="@currentUrl">
+                                            <button class="shortlist-button">
+                                                <span>
+                                                    Liked
+                                                </span>
+                                                <span class="material-symbols-outlined material-symbols-fill">
+                                                    favorite
+                                                </span>
+
+                                            </button>
+                                        </form>
+
+
+                                    }
+                                    else
+                                    {
+                                        <form asp-controller="Property" asp-action="LikeProperty" asp-route-PropertyId="@Model.PropertyId" asp-route-url="@currentUrl">
+                                            <button class="shortlist-button">
+                                                <span class=" matrial-symbol-outlinecd">
+                                                    Like
+                                                </span>
+                                                <span class="material-symbols-outlined">
+                                                    favorite
+                                                </span>
+
+                                            </button>
+                                        </form>
+                                    }
+                                    <button class="flag-button" id="detail-flag-btn">
+                                        <span>
+                                            Flag
+                                        </span>
+                                        <span class="material-symbols-outlined">
+                                            flag
+                                        </span>
+                                    </button>
+                                }
+                                else
+                                {
+                                    if (UserService.IsHidden(Model.UserId, Model.PropertyId))
+                                    {
+                                        <form asp-controller="Owner" asp-action="UnHideProperty" asp-route-UserId="@Model.UserId" asp-route-id="@Model.PropertyId">
+                                            <button type="submit" class="flag-button">
+                                                <span>
+                                                    Unhide
+                                                </span>
+                                                <span>
+                                                    <span class="material-symbols-outlined">
+                                                        hide
+                                                    </span>
+                                                </span>
+                                            </button>
+
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form asp-controller="Owner" asp-action="HideProperty" asp-route-UserId="@Model.UserId" asp-route-id="@Model.PropertyId">
+                                            <button type="submit" class="flag-button">
+                                                <span>
+                                                    Hide
+                                                </span>
+                                                <span>
+                                                    <span class="material-symbols-outlined">
+                                                        hide
+                                                    </span>
+                                                </span>
+                                            </button>
+
+                                        </form>
+                                    }
+
+                                }
+                            }
+                            else
+                            {
+                                <form asp-controller="Account" asp-action="Login" style="display:flex;gap:1rem">
+                                    <button class="shortlist-button" type="submit">
+                                        <span>
+                                            Shortlist
+                                        </span>
+                                        <span class="material-symbols-outlined">
+                                            favorite
+                                        </span>
+
+                                    </button>
+                                    <button class="flag-button" type="submit">
+                                        <span>
+                                            Flag
+                                        </span>
+                                        <span class="material-symbols-outlined">
+                                            flag
+                                        </span>
+                                    </button>
+                                </form>
+                            }
+
+                        }
+                    }
+
+
+                </div>
+                <div class="contact-owner">
+                    <div class="owner-detail-cont">
+
+                        <img src="@ProfilePic" style="border-radius:50%" class="owner-profile" />
+
+                        <div class="owner-detail">
+                            <span style="font-weight:700;">@Model.OwnerName</span>
+                            <span>Owner</span>
+                        </div>
+                    </div>
+                    <hr class="break" />
+                    @if (Role.Count() == 0)
+                    {
+                        <form class="request-form" asp-action="Login" asp-controller="Account">
+                            <span style="font-weight:700">Message</span>
+                            <textarea class="request-form-input-big" placeholder="I am intrested ..." asp-for="Message"></textarea>
+                            <button class="submit-button" type="submit">Contact Owner</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form class="request-form" asp-action="SubmitQuery" asp-controller="Property" asp-route-id="@Model.PropertyId" asp-route-ownerid="@Model.UserId">
+                            <span style="font-weight:700">Message</span>
+                            <textarea class="request-form-input-big" placeholder="I am intrested ..." asp-for="Message" id="enquiry-message"></textarea>
+                            @if (ViewBag.Message != null)
+                            {
+                                <span class="small">
+                                    @ViewBag.Message
+                                </span>
+                            }
+
+                            <button class="submit-button" type="submit">Contact Owner</button>
+                        </form>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+
+
+
+    $('#block-btn').click(function () {
+        var element = document.getElementById("popup-form");
+        element.classList.remove("hidden");
+
+        $.ajax({
+            url: '@Url.Action("BlockForm", "Admin")',
+            type: 'GET',
+            data: { id: @Model.PropertyId},
+            success: function (result) {
+                $('#popup-form').html(result);
+            }
+        })
+
+    })
+
+
+    $('#detail-flag-btn').click(function () {
+
+
+        var element = document.getElementById("popup-form");
+        element.classList.remove("hidden");
+        $.ajax({
+            url: '@Url.Action("Partial", "Property")',
+            type: 'GET',
+            data: {
+                id: @Model.PropertyId,
+                url: '@currentUrl'
+            },
+            success: function (result) {
+                $('#popup-form').html(result);
+            }
+        })
+
+
+    })
+
+    $('#enquiry-message').click(function () {
+        document.querySelector('.small').style.display = "none";
+    });
+
+</script>

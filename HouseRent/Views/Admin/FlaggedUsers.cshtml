@@ -1,0 +1,9 @@
+﻿@model List<Model.FlagUserModel>  
+@{
+    ViewData["Title"] = "FlaggedUsers";
+    Layout = "~/Views/Shared/Dashboard/_AdminDashboardLayout.cshtml";
+}
+
+@*<h1>Flagged Users</h1>*@
+
+@await Html.PartialAsync("Components/_FlaggedUserList", Model)
